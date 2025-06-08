@@ -5,28 +5,15 @@
 #include <pgmspace.h> // Pour l'utilisation de PROGMEM pour stocker le bitmap en mémoire flash
 
 // Inclusion d'une police personnalisée pour supporter le symbole Bitcoin
-#include <Fonts/FreeSans12pt7b.h>; // Nécessite la bibliothèque Adafruit GFX Library installée avec les exemples de polices
+#include <Fonts/FreeSans12pt7b.h> // Nécessite la bibliothèque Adafruit GFX Library installée avec les exemples de polices
 
 #include <ESP8266WiFi.h> // Pour la gestion du WiFi sur l'ESP8266
 #include <WiFiUdp.h>     // Nécessaire pour NTPClient
 #include <NTPClient.h>   // Pour synchroniser l'heure via le protocole NTP
 #include <ArduinoJson.h> // Pour parser les réponses JSON des APIs
 #include <ESP8266HTTPClient.h>  // Pour effectuer des requêtes HTTP
-#include <WiFiClientSecure.h>; // POUR LES REQUÊTES HTTPS
-
-// --- Données des bitmaps WiFi (32x32 pixels) ---
-// IMPORTANT: Si vous avez des bitmaps d'animation WiFi réels, remplacez ces placeholders.
-// Ces bitmaps sont des exemples vides. Si vous les utilisez, l'animation sera invisible.
-// Assurez-vous que le format est compatible Adafruit GFX.
-const uint8_t ImageWifiNiveau_0[] PROGMEM = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 };
-const uint8_t ImageWifiNiveau_1[] PROGMEM = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 };
-const uint8_t ImageWifiNiveau_2[] PROGMEM = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 };
-const uint8_t ImageWifiNiveau_3[] PROGMEM = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 };
-
-
-// --- Paramètres WiFi ---
-const char* ssid = "wifi_name"; // REMPLACEZ par le nom de votre réseau WiFi
-const char* password = "wifi_pass"; // REMPLACEZ par le mot de passe de votre réseau WiFi
+#include <WiFiClientSecure.h> // POUR LES REQUÊTES HTTPS
+#include <WiFiManager.h>      // Pour la gestion de la configuration WiFi
 
 // --- Paramètres des APIs ---
 // Pour CoinGecko (API Bitcoin):
@@ -47,6 +34,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 WiFiUDP ntpUDP; // Objet UDP nécessaire pour NTPClient
 // NTPClient est initialisé avec un décalage UTC de 7200 secondes (pour l'heure de Paris).
 NTPClient timeClient(ntpUDP, "pool.ntp.org", 7200, 60000); // Serveur NTP, décalage, intervalle de mise à jour
+WiFiManager wifiManager; // Déclaration de l'objet WiFiManager
 
 // --- Variables globales pour stocker les données ---
 String timeStamp;      // Heure au format HH:mm:ss
@@ -68,12 +56,61 @@ int currentPage = 0; // Index de la page actuelle dans le tableau cryptoPages
 unsigned long previousMillisDataUpdate = 0;
 const long intervalDataUpdate = 300000; // Mettre à jour les données toutes les 5 minutes (300000 ms)
 
+// --- Paramètres du bouton pour forcer le portail de configuration ---
+#define BUTTON_PIN D3 // Broche GPIO à laquelle le bouton est connecté (D3 correspond à GPIO0)
+#define LONG_PRESS_TIME 3000 // Temps en millisecondes pour un appui long (3 secondes)
+
+unsigned long buttonPressStartTime = 0; // Pour détecter la durée de l'appui
+bool buttonPressed = false; // Pour suivre l'état du bouton
 
 // --- Fonctions d'affichage des pages (déclarations anticipées) ---
 void drawTimePage();
 void drawBitcoinPage();
 void drawEthereumPage();
 void drawBinanceCoinPage();
+
+// --- Fonctions de dessin de symboles WiFi (MISES À JOUR) ---
+
+// Dessine un symbole WiFi avec un certain niveau de signal
+// x, y : position du coin supérieur gauche de la zone de l'icône (par ex. une boîte de 16x16 pixels)
+// level: 0 (pas de signal), 1 (faible), 2 (moyen), 3 (fort)
+void drawWifiSignal(int x, int y, int level) {
+  // Coordonnées du point central (la base du signal)
+  // Environ au milieu horizontalement et vers le bas verticalement pour une icône de ~16x16
+  int dot_x = x + 7; 
+  int dot_y = y + 15; 
+
+  // Dessine le point central
+  display.drawPixel(dot_x, dot_y, WHITE);
+
+  // Dessine les arcs (formes de V inversées) pour représenter les niveaux de signal
+  // Arc 1 (le plus interne)
+  if (level >= 1) {
+    display.drawLine(dot_x - 3, dot_y - 3, dot_x, dot_y - 5, WHITE);
+    display.drawLine(dot_x, dot_y - 5, dot_x + 3, dot_y - 3, WHITE);
+  }
+  // Arc 2 (moyen)
+  if (level >= 2) {
+    display.drawLine(dot_x - 6, dot_y - 6, dot_x, dot_y - 10, WHITE);
+    display.drawLine(dot_x, dot_y - 10, dot_x + 6, dot_y - 6, WHITE);
+  }
+  // Arc 3 (le plus externe)
+  if (level >= 3) {
+    display.drawLine(dot_x - 9, dot_y - 9, dot_x, dot_y - 15, WHITE);
+    display.drawLine(dot_x, dot_y - 15, dot_x + 9, dot_y - 9, WHITE);
+  }
+}
+
+// Dessine un symbole de point d'accès (AP) simple
+// x, y : position du coin supérieur gauche du symbole
+void drawWifiAPIcon(int x, int y) {
+  // Rectangle représentant un routeur/AP
+  display.drawRect(x + 2, y + 8, 12, 8, WHITE);
+  // Petite antenne
+  display.drawLine(x + 8, y + 8, x + 8, y + 4, WHITE);
+  display.drawLine(x + 6, y + 4, x + 10, y + 4, WHITE);
+}
+
 
 // --- Structure pour les pages d'affichage ---
 // Contient le nom de la page et un pointeur vers sa fonction d'affichage
@@ -90,6 +127,29 @@ CryptoPage displayPages[] = {
   {"Binance Coin", drawBinanceCoinPage}
 };
 
+// Callback pour afficher le message du portail de configuration
+void configModeCallback (WiFiManager *myWiFiManager) {
+  display.clearDisplay(); // Ajout de cette ligne pour effacer l'écran
+  Serial.println("Entrée dans le mode de configuration du WiFiManager.");
+  Serial.println(myWiFiManager->getConfigPortalSSID());
+  Serial.println(WiFi.softAPIP());
+
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0,0);
+  display.println("Connectez-vous au WiFi:");
+  display.setTextSize(1.5);
+  display.setCursor(0,18);
+  display.println(myWiFiManager->getConfigPortalSSID());
+  display.setTextSize(1);
+  display.setCursor(0,40);
+  display.println("Accedez a 192.168.4.1");
+  
+  // Dessine le symbole AP en bas à droite
+  drawWifiAPIcon(SCREEN_WIDTH - 20, SCREEN_HEIGHT - 20); 
+
+  display.display();
+}
 
 // --- Fonctions de récupération des données ---
 
@@ -104,6 +164,14 @@ void updateTime() {
 
 void updateCryptoData() { // Renommé pour être plus générique
   Serial.println("Mise à jour des données crypto...");
+  if (WiFi.status() != WL_CONNECTED) { // Vérifie la connexion WiFi avant de tenter une requête
+    Serial.println("WiFi non connecte, impossible de récupérer les données crypto.");
+    btcPrice = 0.0; btc24hChange = 0.0;
+    ethPrice = 0.0; eth24hChange = 0.0;
+    bnbPrice = 0.0; bnb24hChange = 0.0;
+    return; // Sort de la fonction si pas connecté
+  }
+
   WiFiClientSecure client; // Utilise WiFiClientSecure pour HTTPS
   
   // NECESSAIRE POUR HTTPS: DÉSACTIVER LA VALIDATION DES CERTIFICATS POUR LES TESTS.
@@ -1218,6 +1286,14 @@ void setup() {
   Serial.begin(115200); // Vitesse de communication série plus rapide pour ESP8266
   Serial.println(F("Démarrage du système..."));
 
+  // Initialise la broche du bouton en INPUT_PULLUP.
+  // Cela signifie que la broche est normalement HIGH (5V) et passe à LOW quand le bouton est appuyé (relié à la masse).
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  Serial.print(F("Bouton de configuration sur GPIO"));
+  Serial.print(digitalPinToInterrupt(BUTTON_PIN)); // Affiche le numéro GPIO réel
+  Serial.println(F(" initialisé."));
+
+
   // --- Initialisation de l'écran OLED avec les broches trouvées (SDA=GPIO4, SCL=GPIO5) ---
   Wire.begin(4, 5); // Initialise le bus I2C avec SDA sur GPIO4 et SCL sur GPIO5
   Wire.setClock(400000); // Règle la vitesse I2C à 400 kHz (standard et plus rapide)
@@ -1271,18 +1347,18 @@ void setup() {
   Serial.println(F("OLED initialisé."));
 
 
-  // --- Message de bienvenue "Bonjour Mars ! ;)" pendant 5 secondes ---
+  // --- Message de bienvenue "Bonjour Mars ;)" pendant 5 secondes ---
   display.clearDisplay();
   display.setTextSize(2); // Taille du texte
   display.setTextColor(WHITE); // Couleur du texte
   display.setCursor(10, 15); // Positionnement approximatif pour centrer
   display.println("Bonjour");
   display.setCursor(30, 40);
-  display.println("Mars ! ;)");
+  display.println("Mars ;)");
   display.display(); // Afficher le message
-  delay(5000); // Attendre 5 secondes
+  delay(2000); // Attendre 2 secondes
 
-  // --- Connexion WiFi ---
+  // --- Connexion WiFi via WiFiManager ---
   display.clearDisplay(); // Effacer le message de bienvenue
   display.setCursor(0,0);
   display.setTextSize(1);
@@ -1290,57 +1366,48 @@ void setup() {
   display.println("Connexion WiFi...");
   display.display(); // Affiche le message de connexion
 
-  Serial.print("Connexion au WiFi ");
-  Serial.print(ssid);
-  WiFi.begin(ssid, password);
-  int wifiAttempts = 0;
-  // Stocke les bitmaps WiFi dans un tableau pour l'animation facile
-  const uint8_t* wifiBitmaps[] = {ImageWifiNiveau_0, ImageWifiNiveau_1, ImageWifiNiveau_2, ImageWifiNiveau_3};
-  int animationFrame = 0;
+  // Définit le callback pour le mode de configuration
+  wifiManager.setAPCallback(configModeCallback);
 
-  while (WiFi.status() != WL_CONNECTED && wifiAttempts < 30) { // Tenter la connexion 30 fois max
-    delay(500);
-    Serial.print(".");
-
-    // Anime le logo WiFi sans effacer tout l'écran
-    display.fillRect(95, 0, 32, 32, BLACK); // Efface la zone du bitmap WiFi
-    display.drawBitmap(95, 0, wifiBitmaps[animationFrame], 32, 32, WHITE);
-    display.display();
-    animationFrame = (animationFrame + 1) % 4; // Passe au frame suivant
-    
-    wifiAttempts++;
-  }
-  Serial.println("\nWiFi connecté !");
-  
-  if (WiFi.status() == WL_CONNECTED) {
-    // Afficher le message de succès WiFi sur OLED
+  // Tentative de connexion WiFi automatique ou lancement du portail de configuration
+  // Le SSID du point d'accès de configuration sera "AutoConnectAP" et le mot de passe "password"
+  // Vous pouvez les changer selon vos besoins
+  // La méthode autoConnect() démarre le portail AP si la connexion échoue
+  if (!wifiManager.autoConnect("AutoConnectAP", "password")) {
+    Serial.println("Échec de la connexion et temporisation du portail de configuration.");
     display.clearDisplay();
     display.setTextSize(1);
     display.setCursor(0,0);
-    display.println("WiFi connecté à :");
+    display.println("WiFi ECHEC !");
     display.setCursor(0,10);
-    display.setTextSize(2);
-    display.println(ssid); // Nom du réseau WiFi
-    display.setCursor(0,30);
-    display.setTextSize(1);
-    display.print("IP: ");
-    display.println(WiFi.localIP());
-    display.display();
-    delay(3000); // Afficher pendant 3 secondes
-    Serial.print("Adresse IP: ");
-    Serial.println(WiFi.localIP());
-  } else {
-    // Message d'erreur WiFi sur OLED
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.setCursor(0,0);
-    display.println("Erreur WiFi !");
-    display.setCursor(0,10);
-    display.println("Redémarrage...");
+    display.println("Redemarrage...");
     display.display();
     delay(3000);
     ESP.restart(); // Redémarre l'ESP si le WiFi échoue
   }
+  
+  Serial.println("\nWiFi connecte !");
+  
+  // Afficher le message de succès WiFi sur OLED
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setCursor(0,0);
+  display.println("WiFi connecte:");
+  display.setCursor(0,10);
+  display.setTextSize(2);
+  display.println(WiFi.SSID()); // Nom du réseau WiFi connecté
+  display.setCursor(0,30);
+  display.setTextSize(1);
+  display.print("IP: ");
+  display.println(WiFi.localIP());
+  
+  // Dessine le symbole WiFi plein signal en bas à droite
+  drawWifiSignal(SCREEN_WIDTH - 20, SCREEN_HEIGHT - 20, 3); // Position et niveau de signal 3 (fort)
+
+  display.display();
+  delay(3000); // Afficher pendant 3 secondes
+  Serial.print("Adresse IP: ");
+  Serial.println(WiFi.localIP());
 
   // --- Initialisation NTPClient ---
   display.clearDisplay(); // Effacer le message WiFi
@@ -1391,6 +1458,59 @@ void setup() {
 // --- Loop ---
 void loop() {
   unsigned long currentMillis = millis();
+
+  // --- Vérification du bouton pour forcer le mode de configuration ---
+  // Un bouton poussoir est généralement câblé entre la broche GPIO et la masse (GND).
+  // Avec INPUT_PULLUP, la broche est normalement HIGH (5V) et passe à LOW quand le bouton est appuyé.
+  if (digitalRead(BUTTON_PIN) == LOW) { // Le bouton est appuyé
+    if (!buttonPressed) { // Si c'est le début de l'appui
+      buttonPressStartTime = currentMillis;
+      buttonPressed = true;
+      Serial.println("Bouton appuye. Maintenez pour reconfigurer le WiFi...");
+      display.clearDisplay();
+      display.setTextSize(1);
+      display.setTextColor(WHITE);
+      display.setCursor(0,0);
+      display.println("Bouton appuye.");
+      display.setCursor(0,10);
+      display.println("Maintenez " + String(LONG_PRESS_TIME/1000) + "s");
+      display.println("pour config. WiFi");
+      display.display();
+    } else if (currentMillis - buttonPressStartTime >= LONG_PRESS_TIME) {
+      // Appui long détecté !
+      Serial.println("Appui long detecte. Forcage du portail de configuration WiFiManager.");
+      
+      // Nettoie l'écran et démarre le portail de configuration.
+      // Le configModeCallback s'occupera d'afficher les messages du portail.
+      display.clearDisplay(); // IMPORTANT: efface l'écran avant que le portail ne s'active
+      display.display(); // S'assure que l'écran est bien vide avant de passer la main
+      
+      wifiManager.startConfigPortal("AutoConnectAP", "password");
+      
+      // Après la configuration (ou l'échec), redémarrage pour revenir au fonctionnement normal
+      Serial.println("Configuration terminee. Redemarrage...");
+      display.clearDisplay();
+      display.setTextSize(1);
+      display.setTextColor(WHITE);
+      display.setCursor(0,0);
+      display.println("Configuration faite.");
+      display.setCursor(0,10);
+      display.println("Redemarrage...");
+      display.display();
+      delay(2000);
+      ESP.restart(); // Redémarre pour se connecter au nouveau réseau
+    }
+  } else { // Le bouton n'est pas appuyé
+    if (buttonPressed) { // Si le bouton vient d'être relâché (après un appui court)
+      buttonPressed = false;
+      Serial.println("Bouton relache.");
+      // Réaffiche la page actuelle après le message du bouton
+      // Ceci est important car le message "Bouton appuye" a effacé la page précédente.
+      display.clearDisplay(); // Effacer à nouveau au cas où il y aurait du texte résiduel
+      displayPages[currentPage].drawFunction();
+    }
+  }
+
 
   // --- Gestion du changement de page (toutes les 5 secondes) ---
   if (currentMillis - previousMillisPage >= intervalPage) {
